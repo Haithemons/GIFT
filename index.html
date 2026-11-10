@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تذكارات وأرشيف</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Reem+Kufi:wght@400;600;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS File Link -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Ambient Particles Canvas -->
+    <canvas id="ambient-canvas"></canvas>
+
+    <div class="app-container">
+        <!-- App Header -->
+        <header class="app-header">
+            <h1 class="logo-title">أرشيف الذكريات</h1>
+            <p class="logo-subtitle">مساحة أدبية للتأمل والاسترخاء</p>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Flower Interactive Section -->
+            <section class="flower-section">
+                <div class="flower-card glass-panel">
+                    <div class="canvas-container" id="flower-container">
+                        <div class="glow-effect" id="flower-glow"></div>
+                        <canvas id="flower-canvas" width="340" height="340"></canvas>
+                        <div class="touch-hint" id="touch-hint">
+                            <i class="fa-solid fa-hand-pointer"></i>
+                            <span>المس الزهرة لتزهر</span>
+                        </div>
+                    </div>
+
+                    <div class="flower-controls">
+                        <div class="status-badge" id="flower-status">الزهرة في حالة ذبول</div>
+                        <div class="slider-group">
+                            <i class="fa-solid fa-sun icon"></i>
+                            <input type="range" id="bloom-slider" min="0" max="1" step="0.001" value="0">
+                            <i class="fa-solid fa-seedling icon"></i>
+                        </div>
+                        <button class="btn-toggle-bloom" id="btn-toggle" type="button">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span id="btn-text">إزهار الزهرة</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Book Shelf Section -->
+            <section class="shelf-section">
+                <div class="section-title">
+                    <h2><i class="fa-solid fa-book-bookmark"></i> رف المكتبة </h2>
+                    <span class="swipe-hint"><i class="fa-solid fa-arrows-left-right"></i> اسحب للتصفح</span>
+                </div>
+
+                <div class="carousel-container" id="carousel-container">
+                    <div class="carousel-track" id="carousel-track">
+                        
+                        <!-- Book 1 -->
+                        <div class="book-card" data-book="1">
+                            <div class="book-cover color-1">
+                                <div class="book-spine"></div>
+                                <div class="book-spine-line"></div>
+                                <div class="book-spine-line-2"></div>
+                                <i class="fa-solid fa-feather-pointed book-icon"></i>
+                                <h3 class="book-title">بداية الحكاية</h3>
+                                <p class="book-author">01/12/2021</p>
+                            </div>
+                        </div>
+
+                        <!-- Book 2 -->
+                        <div class="book-card" data-book="2">
+                            <div class="book-cover color-2">
+                                <div class="book-spine"></div>
+                                <div class="book-spine-line"></div>
+                                <div class="book-spine-line-2"></div>
+                                <i class="fa-solid fa-heart book-icon"></i>
+                                <h3 class="book-title">الوقوع في الحب</h3>
+                                <p class="book-author">10/11/2026</p>
+                            </div>
+                        </div>
+
+                        <!-- Book 3 -->
+                        <div class="book-card" data-book="3">
+                            <div class="book-cover color-3">
+                                <div class="book-spine"></div>
+                                <div class="book-spine-line"></div>
+                                <div class="book-spine-line-2"></div>
+                                <i class="fa-solid fa-triangle-exclamation book-icon"></i>
+                                <h3 class="book-title">الخطأ</h3>
+                                <p class="book-author">مايو 2022</p>
+                            </div>
+                        </div>
+
+                        <!-- Book 4 -->
+                        <div class="book-card" data-book="4">
+                            <div class="book-cover color-4">
+                                <div class="book-spine"></div>
+                                <div class="book-spine-line"></div>
+                                <div class="book-spine-line-2"></div>
+                                <i class="fa-solid fa-hourglass-end book-icon"></i>
+                                <h3 class="book-title">النهاية</h3>
+                                <p class="book-author">الفصل الأخير</p>
+                            </div>
+                        </div>
+
+                        <!-- Book 5 -->
+                        <div class="book-card" data-book="5">
+                            <div class="book-cover color-creepy">
+                                <div class="book-spine"></div>
+                                <div class="chains-overlay">
+                                    <i class="fa-solid fa-link chain-icon-1"></i>
+                                    <i class="fa-solid fa-link chain-icon-2"></i>
+                                    <i class="fa-solid fa-lock creepy-lock"></i>
+                                </div>
+                                <i class="fa-solid fa-skull book-icon creepy-skull"></i>
+                                <h3 class="book-title creepy-title">المشاعر المكتومة</h3>
+                                <p class="book-author">محظور ومغلق</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="carousel-dots" id="carousel-dots"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==================== صفحة الكتاب الأول ==================== -->
+    <div class="full-book-page" id="book-page-1">
+        <canvas id="rain-canvas"></canvas>
+        <div class="book-bg-overlay"></div>
+        <div class="book-page-topbar">
+            <button class="btn-back" data-close-book="1" type="button"><i class="fa-solid fa-arrow-right"></i> العودة للمكتبة</button>
+        </div>
+        <audio id="bg-audio-1" loop><source src="https://assets.mixkit.co/music/preview/mixkit-a-very-sad-story-49.mp3" type="audio/mpeg"></audio>
+        <div class="book-page-content">
+            <div class="book-page-header">
+                <span class="book-tag"><i class="fa-solid fa-calendar-days"></i> 01/12/2021 - عيد ميلاد وصال</span>
+                <h1 class="book-page-title">البداية... من حيث لم أحتسب</h1>
+            </div>
+            <div class="reading-card transparent-card">
+                <p class="letter-text">هدا كان اول نهار نبعثلك فيه ميساج.. بعثتلك و كنت خايف الحق مردة فعلتيك بيسك معاباليش اصلا وش نوع بشر نتي واسكوا انتي اصلا مهتمة بامري ولا لا.</p>
+                <p class="letter-text">ايا رسلتك اول ميساج نتمسخر بوصال في المساج قتلك <em>"وصال تستاهل هدا كامل؟"</em> بطريقة ساخرة وأنا نريبوندي على ستوري تاعك.</p>
+                <p class="letter-text">بعدها اكتشفت بلي تعرفت على احسن بنت ممكن نتعرف عليها في حياتي هادي.</p>
+                <p class="letter-text">ايا فاتت ليام و لحقت ليلة ريفيو و اعترفتلك ثم، وانتبهت لحاجة ليتني تولهتلها أحسن وهي انو انتي مترددة من هدا الامر.. أنا حسبتك مزالك ماكش متقبلتني برك ولكن كان عقلك سابق عمرنا ثم.</p>
+                <div class="letter-footer"><span class="memory-badge"><i class="fa-solid fa-heart"></i> ذكرى لا تُنسى</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== صفحة الكتاب الثاني ==================== -->
+    <div class="full-book-page" id="book-page-2">
+        <div class="book-bg-2"></div>
+        <div class="book-bg-overlay-2"></div>
+        <div class="book-page-topbar">
+            <button class="btn-back" data-close-book="2" type="button"><i class="fa-solid fa-arrow-right"></i> العودة للمكتبة</button>
+        </div>
+        <audio id="bg-audio-2" loop><source src="https://assets.mixkit.co/music/preview/mixkit-feeling-happy-5.mp3" type="audio/mpeg"></audio>
+        <div class="book-page-content">
+            <div class="book-page-header">
+                <span class="book-tag tag-love"><i class="fa-solid fa-calendar-days"></i> 10/11/2026 - الفصل الثاني</span>
+                <h1 class="book-page-title">الوقوع في الحب</h1>
+            </div>
+            <div class="reading-card transparent-card-love">
+                <p class="letter-text">همممممممم راني نكتب ضرك نهار 10/11/2026 جويسبا حتى حا نعيش لنهار عيد ميلادك ولا حا تعيشي نتي، وعبالي بلي الفكرة تبانلك كرنج مي محرق باه نشري كادو وصح منيش ملزم مي حبيت نخليلك دكرى جميلة.</p>
+                <p class="letter-text">المهم الكتاب الثاني حكايتو على كيفاه ووعلاه حبيتك...</p>
+                <p class="letter-text">حبيتك عجمالك أولا؛ فتاة في نظري خالية من العيوب وحتى إذا مرضت خلت من العيوب! جمال إذا راه الكافر قال: <em>سبحانك ربي خالق الكون أخلقت الملائكة على هيئة إنسان...</em></p>
+                <p class="letter-text">لكن لو كان الجمال هو السبب الوحيد لاني منيش نكتب في هدا الميساج، دونك نروحوا لسبب الثاني: اخلاقك و تربيتك و كأنك مش من جيلنا اصلا! نعترف بفسادي و بفساد كل جيلنا و كلنا بعيوبنا، مي ثما الحب عماني الحق لدرجة مكنتش مهتم بضغوطاتك الي تخرج عيوب الانسان.</p>
+                <p class="letter-text">والسبب الاخير: انك حسستيني اني مهم.. عطيتيني الثقة في النفس و كنتي احد اسباب ثقتي في نفسي.</p>
+                <div class="letter-footer"><span class="memory-badge badge-love"><i class="fa-solid fa-sparkles"></i> نبضات القلب</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== صفحة الكتاب الثالث ==================== -->
+    <div class="full-book-page" id="book-page-3">
+        <div class="book-bg-3"></div>
+        <div class="book-bg-overlay-3"></div>
+        <div class="book-page-topbar">
+            <button class="btn-back" data-close-book="3" type="button"><i class="fa-solid fa-arrow-right"></i> العودة للمكتبة</button>
+        </div>
+        <audio id="bg-audio-3" loop><source src="https://assets.mixkit.co/music/preview/mixkit-serene-view-446.mp3" type="audio/mpeg"></audio>
+        <div class="book-page-content">
+            <div class="book-page-header">
+                <span class="book-tag tag-error"><i class="fa-solid fa-triangle-exclamation"></i> مايو 2022 - الفصل الثالث</span>
+                <h1 class="book-page-title">الخطأ</h1>
+            </div>
+            <div class="reading-card transparent-card-error">
+                <p class="letter-text">الخطأ حدث في مايو 2022.. بعد اختبارات الفصل الثالث، وبعد أن أكلت "الكف الاسطوري" عابر القارات!</p>
+                <p class="letter-text">جاتني شهد قاتلي حابة نخرج معاك.. أنا عبالي بيها تحب "كويكي"، مي شفت بلي أنتي مترددة في فكرة الخروج معايا.</p>
+                <p class="letter-text">ايا قلت: لوكان نقبل أنا بشهد ونخرج معاها، ملاك حا تقعد صديقة معايا عادي.. مباعد نبطل من شهد ونقعدوا كيفكيف! بيسك عبالي شهد أصلاً مش مهتمة بيا، يهمها تغير كويكي.</p>
+                <p class="letter-text">ايا ظهرت حمار! ومني فاهم والووووووو من وش كان في عقلك، وفسدت كلش.</p>
+                <div class="letter-footer"><span class="memory-badge badge-error"><i class="fa-solid fa-bolt"></i> دروس الحياة</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== صفحة الكتاب الرابع ==================== -->
+    <div class="full-book-page" id="book-page-4">
+        <div class="book-bg-4"></div>
+        <div class="book-bg-overlay-4"></div>
+        <div class="book-page-topbar">
+            <button class="btn-back" data-close-book="4" type="button"><i class="fa-solid fa-arrow-right"></i> العودة للمكتبة</button>
+        </div>
+        <audio id="bg-audio-4" loop><source src="https://assets.mixkit.co/music/preview/mixkit-solitude-sliders-964.mp3" type="audio/mpeg"></audio>
+        <div class="book-page-content">
+            <div class="book-page-header">
+                <span class="book-tag tag-end"><i class="fa-solid fa-hourglass-end"></i> الفصل الأخير</span>
+                <h1 class="book-page-title">النهاية</h1>
+            </div>
+            <div class="reading-card transparent-card-end">
+                <p class="letter-text">نختصروا النهاية في سطرين: بعد الخطأ، جا يوم <strong>26/07/2022</strong> بعثتيلي ميساج ورجعنا نحكيو...</p>
+                <p class="letter-text">نهار <strong>13/09/2022</strong> خرجنا كيفكيف...</p>
+                <p class="letter-text">نهار <strong>13/02/2023</strong> عرفت ماماك وبطلنا، ونتي ماشي في بالك اني دورتها تخلاط ورا ما بطلنا! والمهم الكثير والكثير من الحوادث.</p>
+                <p class="letter-text">على كل حال، عيد ميلاد سعيد! وني سير مش حا تلحقي هنا أصلاً للكتاب قبل الاخير، وإذا لحقتي.. الكتاب اللي بعدوا راهو عاطفي وكلام حانكدني عجلوا السيت باه مانحوش، سووو مانصحكش تقرايه!</p>
+                <div class="letter-footer"><span class="memory-badge badge-end"><i class="fa-solid fa-moon"></i> الختام</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== صفحة الكتاب الخامس ==================== -->
+    <div class="full-book-page" id="book-page-5">
+        <div class="book-bg-creepy-custom" style="background-image: url('photo_2026-11-10_03-00-33.jpg');"></div>
+        <div class="book-bg-overlay-creepy"></div>
+
+        <div class="book-page-topbar">
+            <button class="btn-back" data-close-book="5" type="button"><i class="fa-solid fa-arrow-right"></i> العودة للمكتبة</button>
+        </div>
+
+        <audio id="bg-audio-5" loop><source src="https://assets.mixkit.co/music/preview/mixkit-suspense-dark-trailer-149.mp3" type="audio/mpeg"></audio>
+
+        <div class="book-page-content">
+            <div class="book-page-header">
+                <span class="book-tag tag-creepy"><i class="fa-solid fa-skull"></i> المحظور</span>
+                <h1 class="book-page-title creepy-page-title">المشاعر المكتومة</h1>
+            </div>
+
+            <div class="reading-card transparent-card-creepy">
+                <div class="fuck-you-container">
+                    <h1 class="fuck-you-text">FUCK YOU</h1>
+                </div>
+                <div class="letter-footer">
+                    <span class="memory-badge badge-creepy"><i class="fa-solid fa-lock"></i> مقفل للأبد</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript File Link -->
+    <script src="script.js"></script>
+</body>
+</html>
