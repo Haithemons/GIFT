@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 4. Mobile Book Carousel & Smooth Drag (مصحح بالكامل) ---
+    // --- 4. Mobile Book Carousel & Correct RTL Drag (محسوس بالاتجاه العربي الصحيح) ---
     const track = document.getElementById('carousel-track');
     const cards = Array.from(track.querySelectorAll('.book-card'));
     const dotsContainer = document.getElementById('carousel-dots');
@@ -248,7 +248,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const containerWidth = track.parentElement.offsetWidth;
         const centerOffset = (containerWidth - 160) / 2;
         
-        currentTranslate = -currentIndex * cardWidth + centerOffset;
+        // اتجاه موجب في RTL لجعل التصفح يبدأ من اليمين ويسحب لليسار بشكل طبيعي
+        currentTranslate = currentIndex * cardWidth - centerOffset;
         prevTranslate = currentTranslate;
         
         track.style.transform = `translateX(${currentTranslate}px)`;
@@ -281,7 +282,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentPosition = e.touches[0].clientX;
         const diff = currentPosition - startX;
         if (Math.abs(diff) > 5) hasMoved = true;
-        track.style.transform = `translateX(${prevTranslate + diff}px)`;
+        // تعديل اتجاه السحب ليتوافق مع اللغة العربية RTL
+        track.style.transform = `translateX(${prevTranslate - diff}px)`;
     }, {passive: true});
 
     container.addEventListener('touchend', () => {
@@ -290,9 +292,9 @@ document.addEventListener('DOMContentLoaded', () => {
         track.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
         
         const movedBy = currentTranslate - prevTranslate;
-        if (movedBy < -40 && currentIndex < cards.length - 1) {
+        if (movedBy > 40 && currentIndex < cards.length - 1) {
             currentIndex += 1;
-        } else if (movedBy > 40 && currentIndex > 0) {
+        } else if (movedBy < -40 && currentIndex > 0) {
             currentIndex -= 1;
         }
         updateCarousel();
@@ -311,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentPosition = e.clientX;
         const diff = currentPosition - startX;
         if (Math.abs(diff) > 5) hasMoved = true;
-        track.style.transform = `translateX(${prevTranslate + diff}px)`;
+        track.style.transform = `translateX(${prevTranslate - diff}px)`;
     });
 
     container.addEventListener('mouseup', () => {
@@ -320,9 +322,9 @@ document.addEventListener('DOMContentLoaded', () => {
         track.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
         
         const movedBy = currentTranslate - prevTranslate;
-        if (movedBy < -40 && currentIndex < cards.length - 1) {
+        if (movedBy > 40 && currentIndex < cards.length - 1) {
             currentIndex += 1;
-        } else if (movedBy > 40 && currentIndex > 0) {
+        } else if (movedBy < -40 && currentIndex > 0) {
             currentIndex -= 1;
         }
         updateCarousel();
@@ -339,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCarousel();
     window.addEventListener('resize', updateCarousel);
 
-    // --- 5. Book Pages & Auto Music Player (مصحح ومكتمل لجميع الكتب الـ 5) ---
+    // --- 5. Book Pages & Auto Music Player ---
     const bookPages = {
         1: { page: document.getElementById('book-page-1'), audio: document.getElementById('bg-audio-1') },
         2: { page: document.getElementById('book-page-2'), audio: document.getElementById('bg-audio-2') },
@@ -350,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cards.forEach((card, idx) => {
         card.addEventListener('click', (e) => {
-            if (hasMoved) return; // منع فتح الكتاب إذا كان المستخدم يسحب الرف فقط
+            if (hasMoved) return;
             const bookId = card.getAttribute('data-book');
             const target = bookPages[bookId];
 
@@ -364,7 +366,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // إغلاق الكتب
     for (let id in bookPages) {
         const closeBtn = document.querySelector(`[data-close-book="${id}"]`);
         if (closeBtn) {
