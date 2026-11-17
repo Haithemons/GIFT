@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>تذكارات وأرشيف</title>
@@ -11,6 +13,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <!-- ==================== المقدمة الحركية (Intro Screen) ==================== -->
+    <div id="intro-screen">
+        <canvas id="intro-canvas"></canvas>
+        <div class="intro-content-box">
+            <div id="intro-text">May Your Love Never End.</div>
+            <button id="btn-start-intro" type="button">
+                <i class="fa-solid fa-heart"></i>
+                <span>ابدأ التجربة</span>
+            </button>
+        </div>
+        <audio id="intro-audio" loop><source src="https://assets.mixkit.co/music/preview/mixkit-a-very-sad-story-49.mp3" type="audio/mpeg"></audio>
+    </div>
 
     <!-- Ambient Particles Canvas -->
     <canvas id="ambient-canvas"></canvas>
@@ -29,7 +44,8 @@
                 <div class="flower-card glass-panel">
                     <div class="canvas-container" id="flower-container">
                         <div class="glow-effect" id="flower-glow"></div>
-                        <canvas id="flower-canvas" width="340" height="340"></canvas>
+                        <!-- تم دمج الزهرة الثلاثية الأبعاد المتقدمة (طراز التوليب والزهرة التفاعلية) -->
+                        <canvas id="gl" role="img" aria-label="A 3D flower that opens petal by petal"></canvas>
                         <div class="touch-hint" id="touch-hint">
                             <i class="fa-solid fa-hand-pointer"></i>
                             <span>المس الزهرة لتزهر</span>
@@ -40,13 +56,14 @@
                         <div class="status-badge" id="flower-status">الزهرة في حالة ذبول</div>
                         <div class="slider-group">
                             <i class="fa-solid fa-sun icon"></i>
-                            <input type="range" id="bloom-slider" min="0" max="1" step="0.001" value="0">
+                            <input type="range" id="bloom" min="0" max="1" step="0.001" value="0">
                             <i class="fa-solid fa-seedling icon"></i>
                         </div>
-                        <button class="btn-toggle-bloom" id="btn-toggle" type="button">
+                        <button class="btn-toggle-bloom" id="toggle" type="button">
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
                             <span id="btn-text">إزهار الزهرة</span>
                         </button>
+                        <div class="read">البتات المتفتحة: <strong id="count">0</strong> / <span id="total">48</span></div>
                     </div>
                 </div>
             </section>
@@ -129,10 +146,19 @@
 
                 <div class="carousel-dots" id="carousel-dots"></div>
             </section>
+
+            <!-- Finale Section (زر الخاتمة) -->
+            <section class="finale-trigger-section">
+                <button id="btn-finale" class="btn-finale" type="button">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>خاتمة</span>
+                </button>
+            </section>
+
         </main>
     </div>
 
-    <!-- ==================== صفحة الكتاب الأول ==================== -->
+    <!-- ==================== صفحات الكتب ==================== -->
     <div class="full-book-page" id="book-page-1">
         <canvas id="rain-canvas"></canvas>
         <div class="book-bg-overlay"></div>
@@ -155,7 +181,6 @@
         </div>
     </div>
 
-    <!-- ==================== صفحة الكتاب الثاني ==================== -->
     <div class="full-book-page" id="book-page-2">
         <div class="book-bg-2"></div>
         <div class="book-bg-overlay-2"></div>
@@ -179,7 +204,6 @@
         </div>
     </div>
 
-    <!-- ==================== صفحة الكتاب الثالث ==================== -->
     <div class="full-book-page" id="book-page-3">
         <div class="book-bg-3"></div>
         <div class="book-bg-overlay-3"></div>
@@ -202,7 +226,6 @@
         </div>
     </div>
 
-    <!-- ==================== صفحة الكتاب الرابع ==================== -->
     <div class="full-book-page" id="book-page-4">
         <div class="book-bg-4"></div>
         <div class="book-bg-overlay-4"></div>
@@ -225,7 +248,6 @@
         </div>
     </div>
 
-    <!-- ==================== صفحة الكتاب الخامس ==================== -->
     <div class="full-book-page" id="book-page-5">
         <div class="book-bg-creepy-custom" style="background-image: url('photo_2026-11-10_03-00-33.jpg');"></div>
         <div class="book-bg-overlay-creepy"></div>
@@ -251,6 +273,16 @@
                 </div>
             </div>
         </div>
+    </div>
+
+
+    <!-- ==================== شاشة الخاتمة (Matrix Countdown & Birthday Finale) ==================== -->
+    <div id="finale-screen" aria-hidden="true">
+        <button id="btn-close-finale" type="button" title="إغلاق">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <canvas id="finale-matrix-canvas"></canvas>
+        <canvas id="finale-particle-canvas"></canvas>
     </div>
 
     <!-- JavaScript File Link -->
