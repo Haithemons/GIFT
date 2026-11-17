@@ -35,6 +35,85 @@ body {
     direction: rtl;
 }
 
+/* ==================== تنسيقات المقدمة الحركية (Intro Screen) ==================== --*/
+#intro-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #080c14;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#intro-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#intro-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.intro-content-box {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 180px;
+}
+
+#intro-text {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    color: var(--gold-bright);
+    letter-spacing: 1px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 1s ease, transform 1s ease;
+    text-shadow: 0 0 12px var(--gold-glow);
+    text-align: center;
+}
+
+#intro-text.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#btn-start-intro {
+    padding: 12px 28px;
+    border-radius: 25px;
+    border: 1px solid var(--gold-primary);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(153, 101, 21, 0.35));
+    color: var(--gold-bright);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#btn-start-intro:active {
+    transform: scale(0.95);
+}
+
 #ambient-canvas {
     position: fixed;
     top: 0;
@@ -100,14 +179,21 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
+    background: radial-gradient(55% 50% at 50% 40%, #17402f, transparent 72%);
+    border-radius: 16px;
+    overflow: hidden;
 }
 
-#flower-canvas {
-    position: relative;
-    z-index: 2;
+#gl {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
     touch-action: none;
+    cursor: grab;
 }
+#gl.dragging { cursor: grabbing; }
 
 .glow-effect {
     position: absolute;
@@ -144,7 +230,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    gap: 10px;
 }
 
 .status-badge {
@@ -175,6 +261,7 @@ input[type="range"] {
     border-radius: 3px;
     background: rgba(255, 255, 255, 0.1);
     outline: none;
+    accent-color: #ff7790;
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -183,8 +270,8 @@ input[type="range"]::-webkit-slider-thumb {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: var(--gold-primary);
-    box-shadow: 0 0 10px var(--gold-bright);
+    background: #ff7790;
+    box-shadow: 0 0 10px #ff7790;
     cursor: pointer;
 }
 
@@ -192,9 +279,9 @@ input[type="range"]::-webkit-slider-thumb {
     width: 85%;
     padding: 12px;
     border-radius: 14px;
-    border: 1px solid var(--gold-primary);
-    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(153, 101, 21, 0.3));
-    color: var(--gold-bright);
+    border: 0;
+    background: #ff7790;
+    color: #06120e;
     font-family: var(--font-body);
     font-weight: 600;
     font-size: 0.95rem;
@@ -204,7 +291,16 @@ input[type="range"]::-webkit-slider-thumb {
     gap: 8px;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s;
 }
+.btn-toggle-bloom:hover { background: #ff97aa; }
+
+.read {
+    font-size: 0.8rem;
+    color: #8ea697;
+    margin-top: 2px;
+}
+.read strong { color: #e6f0e8; }
 
 .shelf-section {
     display: flex;
@@ -481,12 +577,10 @@ input[type="range"]::-webkit-slider-thumb {
     z-index: -1;
 }
 
-/* ضبط الصورة لتغطي إطار الشاشة تماماً بملء الشاشة وبشكل متناسق */
 .book-bg-creepy-custom {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background-image: url('photo_2026-11-10_03-00-33.jpg');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -684,3 +778,110 @@ input[type="range"]::-webkit-slider-thumb {
 .badge-error { color: #48cae4; }
 .badge-end { color: #9d4edd; }
 .badge-creepy { color: #ff0054; }
+
+/* ==================== تنسيقات زر وشاشة الخاتمة (Matrix Countdown & Particles) ==================== */
+.finale-trigger-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 0 36px;
+    width: 100%;
+}
+
+.btn-finale {
+    padding: 14px 38px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 94, 168, 0.65);
+    background: linear-gradient(135deg, rgba(255, 94, 168, 0.25), rgba(212, 175, 55, 0.22));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #ffd6e8;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(255, 94, 168, 0.28), inset 0 0 12px rgba(255, 94, 168, 0.15);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.btn-finale i {
+    color: #ff5ea8;
+    font-size: 1.1rem;
+}
+
+.btn-finale:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 10px 30px rgba(255, 94, 168, 0.5), inset 0 0 16px rgba(255, 94, 168, 0.25);
+    background: linear-gradient(135deg, rgba(255, 94, 168, 0.4), rgba(212, 175, 55, 0.3));
+}
+
+.btn-finale:active {
+    transform: scale(0.97);
+}
+
+#finale-screen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    z-index: 10000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+#finale-screen.active {
+    display: flex;
+    opacity: 1;
+}
+
+#finale-matrix-canvas,
+#finale-particle-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#finale-matrix-canvas {
+    z-index: 1;
+}
+
+#finale-particle-canvas {
+    z-index: 2;
+}
+
+#btn-close-finale {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 94, 168, 0.5);
+    background: rgba(15, 10, 15, 0.65);
+    backdrop-filter: blur(6px);
+    color: #ff7eb8;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10005;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+#btn-close-finale:hover {
+    background: rgba(255, 94, 168, 0.28);
+    box-shadow: 0 0 16px rgba(255, 94, 168, 0.6);
+    transform: scale(1.08);
+}
